@@ -193,162 +193,66 @@ let books = [
   },
 ];
 
-function renderAllFunction() {
-  renderBookTitles();
-  renderPrice();
-  renderLikes();
-  renderAuthor();
-  renderReleaseDate();
-  renderGenre();
-}
+function renderBooks() {
+  let bookRef = document.getElementById("books-Container");
+  bookRef.innerHTML = "";
 
-function renderBookTitles() {
-  let booksTitleRef = document.getElementById("title_content");
-  let titlesContent = "";
-  for (
-    let indexBookTitles = 0;
-    indexBookTitles < books.length;
-    indexBookTitles++
-  ) {
-    titlesContent = books[0].name + "<br>";
-  }
-  booksTitleRef.innerHTML = titlesContent;
-}
+  books.forEach((book, index) => {
+    let bookElement = document.createElement("div");
+    bookElement.classList.add("book-item");
 
-function renderPrice() {
-  let priceRef = document.getElementById("price");
-  for (let indexPrice = 0; indexPrice < books.length; indexPrice++) {
-    priceRef.innerHTML = books[indexPrice].price;
-  }
-}
-
-function renderLikes() {
-  let likesRef = document.getElementById("liked");
-
-  for (let indexLikes = 0; indexLikes < books.length; indexLikes++) {
-    likesRef.innerHTML = books[indexLikes].likes;
-  }
-}
-
-function renderAuthor() {
-  let authorRef = document.getElementById("author");
-  for (let indexAuthor = 0; indexAuthor < books.length; indexAuthor++) {
-    authorRef.innerHTML = books[indexAuthor].author;
-  }
-}
-
-function renderReleaseDate() {
-  let releaseDateRef = document.getElementById("release_date");
-  let releaseDateContent = " ";
-  for (
-    let indexReleaseDate = 0;indexReleaseDate < books.length;indexReleaseDate++) {
-    releaseDateContent += books[indexReleaseDate].publishedYear;
-  }
-  releaseDateRef.innerHTML = releaseDateContent;
-}
-
-function renderGenre() {
-  let genreRef = document.getElementById("genre");
-  for (let indexGenre = 0; indexGenre < books.length; indexGenre++) {
-    genreRef.innerHTML = books[indexGenre].genre;
-  }
-}
-
-function getBooksInfoTemplate(index) {
-  if (index < 0 || index >= books.length) {
-    return `<p> Ungültiger Index </p>`;
-  }
-
-  const book = books[index];
-  return `
-    <div>
-      <h2 id="title_content">${books[0].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-
-       <div>
-      <h2 id="title_content">${books[1].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-
-       <div>
-      <h2 id="title_content">${books[2].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-
-       <div>
-      <h2 id="title_content">${books[3].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-
+    bookElement.innerHTML = `
+      <h2>${book.name}</h2>
       <div>
-      <h2 id="title_content">${books[4].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-     </div>
+        <img src="img/book-438935_640.png" alt="Book"/>
+      </div>
+      <div class="first-content">
+        <p>${book.price}€</p>
+        <p>
+            <span>${book.likes} 
+            <input type="checkbox" id="heart-${index}" ${book.liked ? 'checked' : ''} onclick="toggleLike(${index})">
+            <label for="heart-${index}"></label>
+          </span>
+        </p>
+      </div>
+      <br>
+      <div class:"secend-content">
+        <p>Author: <span class="create-content">${book.author}</span></p>
+        <p>Published: <span class="create-content"> ${book.publishedYear}</span></p>
+        <p>Genre: <span class="create-content">${book.genre}</span></p>
+      </div>
+      <div class="comment-section">
+        <h3>Kommentare:</h3>
+        <ul>
+          ${book.comments.map(comment => `<li><strong>${comment.name}:</strong> ${comment.comment}</li>`).join('')}
+        </ul>
+      </div>
+      <textarea id="new-comment-${index}" class="comment-input" placeholder="Add new comment..."></textarea>
+      <button class="comment-button" onclick="addComment(${index})">Add comment</button>
+    `;
+    bookRef.appendChild(bookElement);
+  });
+}
 
-       <div>
-      <h2 id="title_content">${books[5].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
+function toggleLike(index) {
+  books[index].liked = !books[index].liked; 
+  if (books[index].liked) {
+    books[index].likes += 1; 
+  } else {
+    books[index].likes -= 1; 
+  }
+  renderBooks(); 
+}
 
-       <div>
-      <h2 id="title_content">${books[6].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-
-       <div>
-      <h2 id="title_content">${books[7].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-       <div>
-      <h2 id="title_content">${books[8].name}</h2>
-      <img src="img/book-438935_640.png" alt="Buch" />
-      <p id="price"></p>
-      <p id="liked"></p>
-      <p id="author"></p>
-      <span id="release_date"></span>
-      <span id="genre"></span>
-    </div>
-
-`;
+function addComment(index) {
+  const commentText = document.getElementById(`new-comment-${index}`).value;
+  if (commentText.trim() !== "") {
+    const newComment = {
+      name: "User", 
+      comment: commentText
+    };
+    books[index].comments.push(newComment); 
+    document.getElementById(`new-comment-${index}`).value = ""; 
+    renderBooks(); 
+  }
 }
